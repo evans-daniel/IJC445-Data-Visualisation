@@ -69,12 +69,12 @@ trains %>%
 
 # FIGURE 3
 trains %>% 
-  group_by(yQ, region) %>% 
+  group_by(yQ, operator) %>% 
   summarise(mean_ppm = mean(ppm), 
             p_km_billions = mean(p_km_billions),
             trains_planned = mean(trains_planned),
             trains_planned_per_fte = mean(trains_planned_per_fte)) %>% 
-  group_by(region) %>% 
+  group_by(operator) %>% 
   mutate(ppm_scale = rescale(mean_ppm, to = c(0,100)),
          p_km_billions_scaled = rescale(p_km_billions, to = c(0,100)),
          trains_planned_per_fte_scaled = rescale(trains_planned_per_fte, to = c(0,100))) %>% 
@@ -83,9 +83,10 @@ trains %>%
   geom_line(aes(y = ppm_scale, color = 'PPM')) + 
   geom_line(aes(y = p_km_billions_scaled, color = 'Passenger KM Scaled'), linetype = "dashed") + 
   geom_line(aes(y = trains_planned_per_fte_scaled, color = 'trains_planned_per_fte_scaled'), linetype = "dashed") +
-  facet_wrap(~ region) + 
-  scale_color_manual(values = c("blue", "red", "purple"), name = "") + 
-  labs(title = "Figure 3: Network Usage Factors Associated with PPM") + 
+  facet_wrap(~ operator) + 
+  scale_color_manual(values = c("blue", "#f4a582", "darkred"), name = "") + 
+  labs(title = "Figure 3: Network Usage Factors Associated with PPM",
+       subtitle = "How network usage trends compare to PPM, with selected factors") + 
   theme(legend.position = "bottom")
 
 ##############################################################################
