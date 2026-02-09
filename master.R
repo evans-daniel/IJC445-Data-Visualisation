@@ -11,6 +11,10 @@ library(scales)
 library(ggrepel)
 library(viridis)
 
+source("funs.R")
+source("data.R")
+source("plots.R")
+
 ggsave(filename = "plots/figure1.png", plot = fig1, height = 10, width = 15)
 ggsave(filename = "plots/figure2.png", plot = fig2, height = 10, width = 15)
 ggsave(filename = "plots/figure3.png", plot = fig3, height = 10, width = 15)
