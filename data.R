@@ -94,7 +94,7 @@ region_operator_list <- list(
   lse = c("c2c", "Chiltern Railways", "Elizabeth line", "Govia Thameslink Railway", "London Overground", "Southeastern", "South Western Railway", "Heathrow Express"),
   longdistance = c("Avanti West Coast", "CrossCountry", "Grand Central", "Hull Trains"),
   regional = c("Caledonian Sleeper", "Merseyrail", "Northern Trains", "ScotRail", "TfW Rail", "TransPennine Express"), 
-  mutli = c("Greater Anglia", "East Midlands Railway", "Great Western Railway", "London North Eastern Railway")
+  multi = c("Greater Anglia", "East Midlands Railway", "Great Western Railway", "London North Eastern Railway")
 )
 
 regions_op_df <- enframe(region_operator_list, name = "region", value = "operator") %>% unnest(cols = c(operator))

@@ -11,7 +11,7 @@ seasonal_box <- data.frame(xmin = seq(min(trains$yQ) + 2/4, max(trains$yQ) - 1/4
 
 # FIGURE 1
 
-trains %>% 
+fig1 <- trains %>% 
   group_by(yQ, operator) %>% 
   summarise(ppm = mean(ppm)) %>% 
   ungroup() %>% 
@@ -29,18 +29,18 @@ trains %>%
        subtitle = "Highlighted from July to January; each line is an individual operator.", 
        caption = "Data Source: ORR") +
   ylim(55, 100) + 
-  theme_economist() + 
   theme(legend.position = "", 
         axis.text.x = element_text(angle = 90, margin = margin(t = 5)),
         axis.title.x = element_text(margin = margin(t = 5)),
         axis.title.y = element_text(margin = margin(r = 7)),
-        title = element_text(margin = margin(b = 5)))
+        title = element_text(margin = margin(b = 5))) +
+  set_fonts()
 
 ##############################################################################
 ##############################################################################
 
-# FIGURE 2 
-trains %>%
+# FIGURE 2
+fig2 <- trains %>%
   group_by(operator, region) %>%
   arrange(yQ) %>%
   summarise(
@@ -62,13 +62,16 @@ trains %>%
   labs(title = "Figure 2: Operator Performance Changes",
        subtitle = "Current Level vs Change Rate",
        x = "Current PPM Level",
-       y = "PPM Change Rate (%)")
+       y = "PPM Change Rate (%)") +
+  set_fonts()
+
+  
 
 ##############################################################################
 ##############################################################################
 
 # FIGURE 3
-trains %>% 
+fig3 <- trains %>% 
   group_by(yQ, operator) %>% 
   summarise(mean_ppm = mean(ppm), 
             p_km_billions = mean(p_km_billions),
@@ -81,31 +84,41 @@ trains %>%
   ungroup() %>% 
   ggplot(aes(x = yQ)) + 
   geom_line(aes(y = ppm_scale, color = 'PPM')) + 
-  geom_line(aes(y = p_km_billions_scaled, color = 'Passenger KM Scaled'), linetype = "dashed") + 
-  geom_line(aes(y = trains_planned_per_fte_scaled, color = 'trains_planned_per_fte_scaled'), linetype = "dashed") +
+  geom_line(aes(y = p_km_billions_scaled, color = 'Passenger KM (Scaled)'), linetype = "dashed") + 
+  geom_line(aes(y = trains_planned_per_fte_scaled, color = 'Trains Planned per FTE (Scaled)'), linetype = "dashed") +
   facet_wrap(~ operator) + 
-  scale_color_manual(values = c("blue", "#f4a582", "darkred"), name = "") + 
+  scale_color_viridis_d(name = "") + 
   labs(title = "Figure 3: Network Usage Factors Associated with PPM",
        subtitle = "How network usage trends compare to PPM, with selected factors") + 
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom")+
+  set_fonts()
+
 
 ##############################################################################
 ##############################################################################
 
 # FIGURE 4
-trains %>% 
+fig4 <- trains %>% 
   group_by(yQ, region) %>% 
   summarise(mean_ppm = mean(ppm), 
             yrly_gov_total_investment = mean(yrly_gov_total_investment),
             yrly_priv_total_investment = mean(yrly_priv_total_investment),
             total = sum(yrly_priv_total_investment, yrly_gov_total_investment)) %>% 
+  ungroup() %>% 
   ggplot(aes(x = yQ, y = mean_ppm)) + 
   geom_point(aes(size = total, colour = region), alpha = .6) + 
   geom_smooth(aes(group = region, colour = region), alpha = .15, se = TRUE) + 
   scale_size_continuous(range = c(2 , 10), guide = "none") +
+  scale_colour_manual(values = c("longdistance" = "#440154", 
+                                 "regional" = "#fde725", 
+                                 "multi" = "#3b528b", 
+                                 "lse" = "#21918c"),
+                      breaks = c("longdistance", "regional", "multi", "lse"),
+                      labels = c("Long Distance", 
+                                 "Regional", 
+                                 "Multi-region", 
+                                 "London and South East")) +
   labs(title = "Figure 4: PPM and Funding over time") + 
   theme(legend.position = "bottom") + 
-  scale_color_viridis_d()
-
-
+  set_fonts()
 
